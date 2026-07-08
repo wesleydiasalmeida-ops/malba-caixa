@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Calculadora de Fichas - Festa Junina</title>
+    <title>Calculadora de Fichas - C.E. Malba Tahan</title>
     <style>
         :root {
             --bg-color: #fcf8f2;
@@ -13,6 +13,7 @@
             --dark-color: #4a2306;
             --border-color: #e0d3c1;
             --card-bg: #ffffff;
+            --category-bg: #f5ede2;
         }
 
         * {
@@ -85,10 +86,25 @@
             margin-top: 2px;
         }
 
+        .category-title {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: var(--category-bg);
+            padding: 6px 12px;
+            border-radius: 8px;
+            margin: 15px 0 8px 0;
+            color: var(--dark-color);
+            letter-spacing: 0.5px;
+        }
+        .category-title:first-of-type {
+            margin-top: 0;
+        }
+
         .items-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
@@ -97,7 +113,7 @@
             align-items: center;
             justify-content: space-between;
             background: #faf6f0;
-            padding: 14px 16px;
+            padding: 12px 16px;
             border-radius: 16px;
             border: 1px solid var(--border-color);
             transition: all 0.2s ease;
@@ -105,16 +121,18 @@
 
         .item-info {
             flex: 1;
+            padding-right: 8px;
         }
 
         .item-name {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             color: var(--dark-color);
+            line-height: 1.2;
         }
 
         .item-price {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--primary-color);
             font-weight: 600;
             margin-top: 2px;
@@ -288,8 +306,8 @@
         </div>
 
         <header>
-            <h1>Caixa Junino</h1>
-            <p>Calculadora de Fichas Rápida</p>
+            <h1>C.E. Malba Tahan</h1>
+            <p>Caixa de Fichas - Festa Junina</p>
         </header>
 
         <div class="items-list" id="items-list">
@@ -318,49 +336,102 @@
     </div>
 
     <script>
-        // Configuração dos itens e preços padrão da Festa Junina
-        // Sinta-se livre para alterar os nomes ou valores aqui!
-        const products = [
-            { id: 'quentao', name: 'Quentão / Vinho Quente', price: 8.00 },
-            { id: 'pastel', name: 'Pastel (Carne/Queijo)', price: 10.00 },
-            { id: 'pipoca', name: 'Pipoca', price: 5.00 },
-            { id: 'milho', name: 'Milho Cozido', price: 6.00 },
-            { id: 'espetinho', name: 'Espetinho (Churrasco)', price: 12.00 },
-            { id: 'doces', name: 'Doces Típicos (Canjica/Pamonha)', price: 7.00 },
-            { id: 'brincadeira', name: 'Ficha de Brincadeira (Pescaria/Alvo)', price: 5.00 },
-            { id: 'refrigerante', name: 'Refrigerante / Água', price: 6.00 }
+        // Dados atualizados estritamente de acordo com a imagem fornecida
+        const menuData = [
+            {
+                category: "Salgados",
+                items: [
+                    { id: 'coxinha', name: 'Coxinha', price: 7.00 },
+                    { id: 'enrolado_salsicha', name: 'Enrolado de Salsicha', price: 7.00 },
+                    { id: 'risoles', name: 'Risoles', price: 7.00 },
+                    { id: 'espetinho_carne', name: 'Espetinho de Carne', price: 8.00 },
+                    { id: 'cachorro_quente', name: 'Cachorro-Quente', price: 12.00 },
+                    { id: 'pastel', name: 'Pastel', price: 10.00 },
+                    { id: 'pipoca_salgada', name: 'Pipoca Salgada', price: 1.00 }
+                ]
+            },
+            {
+                category: "Doces e Sobremesas",
+                items: [
+                    { id: 'pacoca', name: 'Paçoca', price: 5.00 },
+                    { id: 'cocada', name: 'Cocada', price: 5.00 },
+                    { id: 'pipoca_gourmet', name: 'Pipoca Gourmet', price: 3.00 },
+                    { id: 'maca_amor', name: 'Maçã do Amor', price: 6.00 },
+                    { id: 'espetinho_morango', name: 'Espetinho de Morango', price: 12.00 },
+                    { id: 'bolo_fatia', name: 'Bolo com Cobertura (Fatia)', price: 4.00 },
+                    { id: 'bolo_casquinha', name: 'Bolo Recheado na Casquinha', price: 4.00 },
+                    { id: 'cone_trufado', name: 'Cone Trufado', price: 8.00 },
+                    { id: 'pudim_fatia', name: 'Pudim (Fatia)', price: 4.00 },
+                    { id: 'churros', name: 'Churros', price: 8.00 }
+                ]
+            },
+            {
+                category: "Bebidas",
+                items: [
+                    { id: 'agua', name: 'Água', price: 3.00 },
+                    { id: 'coca_lata', name: 'Coca Lata', price: 6.00 },
+                    { id: 'guarana_lata', name: 'Guaraná Lata', price: 6.00 },
+                    { id: 'skol_lata', name: 'Skol Lata 269ml', price: 6.00 },
+                    { id: 'brahma_lata', name: 'Brahma Lata 269ml', price: 6.00 },
+                    { id: 'quentao', name: 'Quentão', price: 5.00 }
+                ]
+            },
+            {
+                category: "Diversão / Brincadeiras",
+                items: [
+                    { id: 'pescaria', name: 'Pescaria', price: 5.00 },
+                    { id: 'brinquedos', name: 'Brinquedos', price: 8.00 }
+                ]
+            }
         ];
 
-        // Estado do app (quantidades selecionadas)
+        // Mapeamento plano para controle do estado do carrinho
         const cart = {};
-        products.forEach(p => cart[p.id] = 0);
+        const productMap = {};
+
+        // Inicializa o estado do app com base no menuData
+        menuData.forEach(cat => {
+            cat.items.forEach(item => {
+                cart[item.id] = 0;
+                productMap[item.id] = item;
+            });
+        });
 
         let totalOrder = 0;
 
-        // Renderizar a lista de produtos na tela
-        function renderProducts() {
+        // Renderiza o cardápio dividindo por categorias visuais
+        function renderMenu() {
             const container = document.getElementById('items-list');
             container.innerHTML = '';
 
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'item-card';
-                card.innerHTML = `
-                    <div class="item-info">
-                        <div class="item-name">${product.name}</div>
-                        <div class="item-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
-                    </div>
-                    <div class="counter-control">
-                        <button class="btn-count" onclick="updateQuantity('${product.id}', -1)">-</button>
-                        <span class="count-value" id="count-${product.id}">0</span>
-                        <button class="btn-count" onclick="updateQuantity('${product.id}', 1)">+</button>
-                    </div>
-                `;
-                container.appendChild(card);
+            menuData.forEach(cat => {
+                // Adiciona o cabeçalho da categoria
+                const title = document.createElement('div');
+                title.className = 'category-title';
+                title.innerText = cat.category;
+                container.appendChild(title);
+
+                // Adiciona os itens pertencentes a ela
+                cat.items.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    card.innerHTML = `
+                        <div class="item-info">
+                            <div class="item-name">${product.name}</div>
+                            <div class="item-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        <div class="counter-control">
+                            <button class="btn-count" onclick="updateQuantity('${product.id}', -1)">-</button>
+                            <span class="count-value" id="count-${product.id}">0</span>
+                            <button class="btn-count" onclick="updateQuantity('${product.id}', 1)">+</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
             });
         }
 
-        // Atualizar quantidade de um item
+        // Atualiza a quantidade do item selecionado
         function updateQuantity(productId, change) {
             const currentQty = cart[productId];
             const newQty = currentQty + change;
@@ -372,17 +443,17 @@
             }
         }
 
-        // Calcular o valor total do pedido
+        // Soma os valores do carrinho
         function calculateTotal() {
-            totalOrder = products.reduce((sum, product) => {
-                return sum + (cart[product.id] * product.price);
+            totalOrder = Object.keys(cart).reduce((sum, id) => {
+                return sum + (cart[id] * productMap[id].price);
             }, 0);
 
             document.getElementById('total-display').innerText = `R$ ${totalOrder.toFixed(2).replace('.', ',')}`;
-            calculateChange(); // Recalcula o troco automaticamente ao mudar o total
+            calculateChange();
         }
 
-        // Calcular o troco com base no valor pago
+        // Lógica automática de cálculo do troco ou débito
         function calculateChange() {
             const paidInput = document.getElementById('amount-paid');
             const changeDisplay = document.getElementById('change-display');
@@ -410,18 +481,17 @@
             }
         }
 
-        // Resetar o aplicativo inteiro
+        // Limpa todo o estado do formulário para o próximo cliente
         function clearAll() {
-            products.forEach(p => {
-                cart[p.id] = 0;
-                document.getElementById(`count-${p.id}`).innerText = 0;
+            Object.keys(cart).forEach(id => {
+                cart[id] = 0;
+                document.getElementById(`count-${id}`).innerText = 0;
             });
             document.getElementById('amount-paid').value = '';
             calculateTotal();
         }
 
-        // Inicializar o app ao carregar
-        window.onload = renderProducts;
+        window.onload = renderMenu;
     </script>
 </body>
 </html>

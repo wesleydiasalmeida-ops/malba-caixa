@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora de Fichas - Festa Junina</title>
+    <style>
+        :root {
+            --bg-color: #fcf8f2;
+            --primary-color: #e65c00;
+            --primary-light: #ff8e42;
+            --secondary-color: #ffb300;
+            --dark-color: #4a2306;
+            --border-color: #e0d3c1;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--dark-color);
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(74, 35, 6, 0.08);
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Bandeirinhas decorativas Juninas em puro CSS */
+        .flags-container {
+            display: flex;
+            justify-content: space-around;
+            margin: -20px -20px 16px -20px;
+            padding-top: 6px;
+            background: #fff8f0;
+            border-bottom: 2px dashed var(--border-color);
+        }
+
+        .flag {
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 20px solid var(--primary-color);
+        }
+        .flag:nth-child(even) { border-top-color: var(--secondary-color); }
+        .flag:nth-child(3n) { border-top-color: #4caf50; }
+        .flag:nth-child(4n) { border-top-color: #2196f3; }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        header p {
+            font-size: 14px;
+            color: #7c624d;
+            margin-top: 2px;
+        }
+
+        .items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .item-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #faf6f0;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--dark-color);
+        }
+
+        .item-price {
+            font-size: 14px;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .counter-control {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-count {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 6px rgba(230, 92, 0, 0.2);
+            touch-action: manipulation;
+        }
+
+        .btn-count:active {
+            transform: scale(0.95);
+            background: var(--primary-light);
+        }
+
+        .count-value {
+            font-size: 18px;
+            font-weight: 700;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .summary-box {
+            background: var(--dark-color);
+            color: white;
+            padding: 18px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 16px rgba(74, 35, 6, 0.15);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .summary-total {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--secondary-color);
+        }
+
+        .change-section {
+            background: #f9f9f9;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 16px;
+        }
+
+        .change-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .input-group span {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            color: #7c624d;
+        }
+
+        .input-money {
+            width: 100%;
+            padding: 12px 12px 12px 42px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--dark-color);
+            background: white;
+            outline: none;
+            transition: border-color 0.2s;
+            -moz-appearance: textfield;
+        }
+
+        .input-money::-webkit-outer-spin-button,
+        .input-money::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .input-money:focus {
+            border-color: var(--primary-color);
+        }
+
+        .change-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .change-label {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .change-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4caf50;
+        }
+        
+        .change-value.negative {
+            color: #f44336;
+        }
+
+        .btn-clear {
+            width: 100%;
+            padding: 14px;
+            background: #f0e6da;
+            border: none;
+            border-radius: 14px;
+            color: var(--dark-color);
+            font-size: 15px;
+            font-weight: 700;
+            margin-top: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .btn-clear:active {
+            background: #e2d3c1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="flags-container">
+            <div class="flag"></div><div class="flag"></div><div class="flag"></div>
+            <div class="flag"></div><div class="flag"></div><div class="flag"></div>
+            <div class="flag"></div><div class="flag"></div><div class="flag"></div>
+        </div>
+
+        <header>
+            <h1>Caixa Junino</h1>
+            <p>Calculadora de Fichas Rápida</p>
+        </header>
+
+        <div class="items-list" id="items-list">
+            </div>
+
+        <div class="summary-box">
+            <div class="summary-row">
+                <span class="summary-label">TOTAL A PAGAR</span>
+                <span class="summary-total" id="total-display">R$ 0,00</span>
+            </div>
+        </div>
+
+        <div class="change-section">
+            <div class="change-title">💸 Calcular Troco</div>
+            <div class="input-group">
+                <span>R$</span>
+                <input type="number" step="0.01" inputmode="decimal" placeholder="Valor pago pelo cliente" class="input-money" id="amount-paid" oninput="calculateChange()">
+            </div>
+            <div class="change-result">
+                <span class="change-label" id="change-label">Troco:</span>
+                <span class="change-value" id="change-display">R$ 0,00</span>
+            </div>
+        </div>
+
+        <button class="btn-clear" onclick="clearAll()">Zerar Pedido</button>
+    </div>
+
+    <script>
+        // Configuração dos itens e preços padrão da Festa Junina
+        // Sinta-se livre para alterar os nomes ou valores aqui!
+        const products = [
+            { id: 'quentao', name: 'Quentão / Vinho Quente', price: 8.00 },
+            { id: 'pastel', name: 'Pastel (Carne/Queijo)', price: 10.00 },
+            { id: 'pipoca', name: 'Pipoca', price: 5.00 },
+            { id: 'milho', name: 'Milho Cozido', price: 6.00 },
+            { id: 'espetinho', name: 'Espetinho (Churrasco)', price: 12.00 },
+            { id: 'doces', name: 'Doces Típicos (Canjica/Pamonha)', price: 7.00 },
+            { id: 'brincadeira', name: 'Ficha de Brincadeira (Pescaria/Alvo)', price: 5.00 },
+            { id: 'refrigerante', name: 'Refrigerante / Água', price: 6.00 }
+        ];
+
+        // Estado do app (quantidades selecionadas)
+        const cart = {};
+        products.forEach(p => cart[p.id] = 0);
+
+        let totalOrder = 0;
+
+        // Renderizar a lista de produtos na tela
+        function renderProducts() {
+            const container = document.getElementById('items-list');
+            container.innerHTML = '';
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-info">
+                        <div class="item-name">${product.name}</div>
+                        <div class="item-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div class="counter-control">
+                        <button class="btn-count" onclick="updateQuantity('${product.id}', -1)">-</button>
+                        <span class="count-value" id="count-${product.id}">0</span>
+                        <button class="btn-count" onclick="updateQuantity('${product.id}', 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Atualizar quantidade de um item
+        function updateQuantity(productId, change) {
+            const currentQty = cart[productId];
+            const newQty = currentQty + change;
+
+            if (newQty >= 0) {
+                cart[productId] = newQty;
+                document.getElementById(`count-${productId}`).innerText = newQty;
+                calculateTotal();
+            }
+        }
+
+        // Calcular o valor total do pedido
+        function calculateTotal() {
+            totalOrder = products.reduce((sum, product) => {
+                return sum + (cart[product.id] * product.price);
+            }, 0);
+
+            document.getElementById('total-display').innerText = `R$ ${totalOrder.toFixed(2).replace('.', ',')}`;
+            calculateChange(); // Recalcula o troco automaticamente ao mudar o total
+        }
+
+        // Calcular o troco com base no valor pago
+        function calculateChange() {
+            const paidInput = document.getElementById('amount-paid');
+            const changeDisplay = document.getElementById('change-display');
+            const changeLabel = document.getElementById('change-label');
+            
+            const amountPaid = parseFloat(paidInput.value) || 0;
+
+            if (amountPaid === 0) {
+                changeDisplay.innerText = "R$ 0,00";
+                changeDisplay.className = "change-value";
+                changeLabel.innerText = "Troco:";
+                return;
+            }
+
+            const change = amountPaid - totalOrder;
+
+            if (change < 0) {
+                changeLabel.innerText = "Falta pagar:";
+                changeDisplay.innerText = `R$ ${Math.abs(change).toFixed(2).replace('.', ',')}`;
+                changeDisplay.className = "change-value negative";
+            } else {
+                changeLabel.innerText = "Troco:";
+                changeDisplay.innerText = `R$ ${change.toFixed(2).replace('.', ',')}`;
+                changeDisplay.className = "change-value";
+            }
+        }
+
+        // Resetar o aplicativo inteiro
+        function clearAll() {
+            products.forEach(p => {
+                cart[p.id] = 0;
+                document.getElementById(`count-${p.id}`).innerText = 0;
+            });
+            document.getElementById('amount-paid').value = '';
+            calculateTotal();
+        }
+
+        // Inicializar o app ao carregar
+        window.onload = renderProducts;
+    </script>
+</body>
+</html>

@@ -173,14 +173,14 @@
             text-align: center;
         }
 
-        /* Novo Estilo: Resumo do Pedido */
+        /* Resumo do Pedido */
         .order-summary-container {
             background: #fdfaf5;
             border: 2px dashed var(--border-color);
             border-radius: 16px;
             padding: 16px;
             margin-bottom: 20px;
-            display: none; /* Oculto inicialmente */
+            display: none;
         }
 
         .summary-title {
@@ -425,8 +425,8 @@
                     { id: 'espetinho_morango', name: 'Espetinho de Morango', price: 12.00 },
                     { id: 'bolo_fatia', name: 'Bolo com Cobertura', price: 4.00 },
                     { id: 'bolo_casquinha', name: 'Bolo na Casquinha', price: 4.00 },
-                    { id: 'cone_trufado', name: 'Cone Trufado', price: 8.00 },
-                    { id: 'pudim_fatia', name: 'Pudim (Fatia)', price: 4.00 },
+                    { id: 'pudim_fatia', name: 'Pudim (Fatia)', price: 4.00 },  // Pudim agora vem antes
+                    { id: 'cone_trufado', name: 'Cone Trufado', price: 8.00 },   // Cone Trufado vem depois
                     { id: 'churros', name: 'Churros', price: 8.00 }
                 ]
             },
@@ -502,11 +502,10 @@
             }
         }
 
-        // Atualiza a lista de produtos escolhidos
         function updateSummary() {
             const summaryContainer = document.getElementById('order-summary-container');
             const summaryList = document.getElementById('order-summary-list');
-            summaryList.innerHTML = ''; // Limpa a lista atual
+            summaryList.innerHTML = ''; 
             
             let hasItems = false;
 
@@ -529,7 +528,6 @@
                 }
             });
 
-            // Mostra ou esconde o container baseado se há produtos selecionados
             summaryContainer.style.display = hasItems ? 'block' : 'none';
         }
 
@@ -540,7 +538,7 @@
 
             document.getElementById('total-display').innerText = `R$ ${totalOrder.toFixed(2).replace('.', ',')}`;
             
-            updateSummary(); // Chama a função do resumo sempre que o total mudar
+            updateSummary();
             calculateChange();
         }
 
@@ -577,9 +575,8 @@
                 document.getElementById(`count-${id}`).innerText = 0;
             });
             document.getElementById('amount-paid').value = '';
-            calculateTotal(); // Recalcula (o que vai zerar e esconder o resumo)
+            calculateTotal(); 
             
-            // Rola a página para o topo suavemente
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 

@@ -46,7 +46,7 @@
             overflow: hidden;
         }
 
-        /* Bandeirinhas decorativas Juninas em puro CSS */
+        /* Bandeirinhas decorativas */
         .flags-container {
             display: flex;
             justify-content: space-around;
@@ -173,6 +173,65 @@
             text-align: center;
         }
 
+        /* Novo Estilo: Resumo do Pedido */
+        .order-summary-container {
+            background: #fdfaf5;
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: none; /* Oculto inicialmente */
+        }
+
+        .summary-title {
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--dark-color);
+            text-transform: uppercase;
+        }
+
+        .order-summary-list {
+            list-style: none;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .order-summary-list li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f0e6da;
+            padding-bottom: 8px;
+        }
+
+        .order-summary-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .summary-item-qty {
+            font-weight: 700;
+            color: white;
+            background-color: var(--primary-color);
+            padding: 2px 6px;
+            border-radius: 6px;
+            margin-right: 6px;
+            font-size: 12px;
+        }
+
+        .summary-item-name {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .summary-item-subtotal {
+            font-weight: 600;
+            color: #7c624d;
+        }
+
+        /* Painel de Total */
         .summary-box {
             background: var(--dark-color);
             color: white;
@@ -199,6 +258,7 @@
             color: var(--secondary-color);
         }
 
+        /* Seção de Troco */
         .change-section {
             background: #f9f9f9;
             border: 1px solid var(--border-color);
@@ -313,6 +373,12 @@
         <div class="items-list" id="items-list">
             </div>
 
+        <div class="order-summary-container" id="order-summary-container">
+            <div class="summary-title">📝 Resumo do Pedido</div>
+            <ul class="order-summary-list" id="order-summary-list">
+                </ul>
+        </div>
+
         <div class="summary-box">
             <div class="summary-row">
                 <span class="summary-label">TOTAL A PAGAR</span>
@@ -346,7 +412,7 @@
                     { id: 'espetinho_carne', name: 'Espetinho de Carne', price: 8.00 },
                     { id: 'cachorro_quente', name: 'Cachorro-Quente', price: 12.00 },
                     { id: 'pastel', name: 'Pastel', price: 10.00 },
-                    { id: 'pipoca_salgada', name: 'Pipoca Salgada', price: 2.00 } // Preço atualizado aqui!
+                    { id: 'pipoca_salgada', name: 'Pipoca Salgada', price: 2.00 }
                 ]
             },
             {
@@ -357,8 +423,8 @@
                     { id: 'pipoca_gourmet', name: 'Pipoca Gourmet', price: 3.00 },
                     { id: 'maca_amor', name: 'Maçã do Amor', price: 6.00 },
                     { id: 'espetinho_morango', name: 'Espetinho de Morango', price: 12.00 },
-                    { id: 'bolo_fatia', name: 'Bolo com Cobertura (Fatia)', price: 4.00 },
-                    { id: 'bolo_casquinha', name: 'Bolo Recheado na Casquinha', price: 4.00 },
+                    { id: 'bolo_fatia', name: 'Bolo com Cobertura', price: 4.00 },
+                    { id: 'bolo_casquinha', name: 'Bolo na Casquinha', price: 4.00 },
                     { id: 'cone_trufado', name: 'Cone Trufado', price: 8.00 },
                     { id: 'pudim_fatia', name: 'Pudim (Fatia)', price: 4.00 },
                     { id: 'churros', name: 'Churros', price: 8.00 }
@@ -436,12 +502,45 @@
             }
         }
 
+        // Atualiza a lista de produtos escolhidos
+        function updateSummary() {
+            const summaryContainer = document.getElementById('order-summary-container');
+            const summaryList = document.getElementById('order-summary-list');
+            summaryList.innerHTML = ''; // Limpa a lista atual
+            
+            let hasItems = false;
+
+            Object.keys(cart).forEach(id => {
+                const qty = cart[id];
+                if (qty > 0) {
+                    hasItems = true;
+                    const product = productMap[id];
+                    const subtotal = qty * product.price;
+
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div>
+                            <span class="summary-item-qty">${qty}x</span>
+                            <span class="summary-item-name">${product.name}</span>
+                        </div>
+                        <span class="summary-item-subtotal">R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+                    `;
+                    summaryList.appendChild(li);
+                }
+            });
+
+            // Mostra ou esconde o container baseado se há produtos selecionados
+            summaryContainer.style.display = hasItems ? 'block' : 'none';
+        }
+
         function calculateTotal() {
             totalOrder = Object.keys(cart).reduce((sum, id) => {
                 return sum + (cart[id] * productMap[id].price);
             }, 0);
 
             document.getElementById('total-display').innerText = `R$ ${totalOrder.toFixed(2).replace('.', ',')}`;
+            
+            updateSummary(); // Chama a função do resumo sempre que o total mudar
             calculateChange();
         }
 
@@ -478,7 +577,10 @@
                 document.getElementById(`count-${id}`).innerText = 0;
             });
             document.getElementById('amount-paid').value = '';
-            calculateTotal();
+            calculateTotal(); // Recalcula (o que vai zerar e esconder o resumo)
+            
+            // Rola a página para o topo suavemente
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         window.onload = renderMenu;

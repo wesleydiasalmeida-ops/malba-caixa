@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Fichas - C.E. Malba Tahan (Desktop)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora de Fichas - C.E. Malba Tahan</title>
     <style>
         :root {
             --bg-color: #fcf8f2;
@@ -21,24 +21,27 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--dark-color);
-            padding: 24px;
+            padding: 16px;
             display: flex;
             justify-content: center;
+            align-items: flex-start;
             min-height: 100vh;
         }
 
+        /* Container padrão (Mobile First) */
         .app-container {
             width: 100%;
-            max-width: 1400px; /* Largura expandida para Desktop */
+            max-width: 480px;
             background: var(--card-bg);
             border-radius: 24px;
-            padding: 24px 32px;
-            box-shadow: 0 12px 32px rgba(74, 35, 6, 0.1);
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(74, 35, 6, 0.08);
             border: 2px solid var(--border-color);
             position: relative;
         }
@@ -47,8 +50,8 @@
         .flags-container {
             display: flex;
             justify-content: space-around;
-            margin: -24px -32px 24px -32px;
-            padding-top: 8px;
+            margin: -20px -20px 16px -20px;
+            padding-top: 6px;
             background: #fff8f0;
             border-bottom: 2px dashed var(--border-color);
             border-radius: 24px 24px 0 0;
@@ -57,9 +60,10 @@
         .flag {
             width: 0;
             height: 0;
-            border-left: 18px solid transparent;
-            border-right: 18px solid transparent;
-            border-top: 26px solid var(--primary-color);
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 20px solid var(--primary-color);
+            flex-shrink: 0;
         }
         .flag:nth-child(even) { border-top-color: var(--secondary-color); }
         .flag:nth-child(3n) { border-top-color: #4caf50; }
@@ -67,11 +71,11 @@
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         header h1 {
-            font-size: 32px;
+            font-size: 24px;
             color: var(--primary-color);
             font-weight: 800;
             letter-spacing: -0.5px;
@@ -79,42 +83,33 @@
         }
 
         header p {
-            font-size: 16px;
+            font-size: 14px;
             color: #7c624d;
-            margin-top: 4px;
+            margin-top: 2px;
             font-weight: 600;
         }
 
-        /* Layout Principal do Desktop: Menu à esquerda, Painel à direita */
-        .desktop-layout {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 32px;
-            align-items: start;
-        }
-
-        /* Grade do Cardápio (4 Colunas) */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+        /* Estrutura Base Mobile */
+        .app-layout {
+            display: flex;
+            flex-direction: column;
             gap: 20px;
         }
 
-        .category-column {
-            background: #fdfaf5;
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px;
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         .category-title {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
             text-transform: uppercase;
             background: var(--category-bg);
-            padding: 8px 12px;
+            padding: 6px 12px;
             border-radius: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: var(--dark-color);
             letter-spacing: 0.5px;
             text-align: center;
@@ -123,59 +118,50 @@
         .items-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
+        /* Cartões de Item (Padrão Mobile) */
         .item-card {
             display: flex;
-            flex-direction: column;
-            background: #ffffff;
-            padding: 10px 12px;
-            border-radius: 12px;
+            align-items: center;
+            justify-content: space-between;
+            background: #faf6f0;
+            padding: 12px 16px;
+            border-radius: 16px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-            transition: transform 0.1s;
-        }
-
-        .item-card:hover {
-            border-color: var(--primary-light);
+            transition: all 0.2s ease;
         }
 
         .item-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .item-name {
-            font-weight: 700;
-            font-size: 14px;
-            color: var(--dark-color);
-            line-height: 1.2;
             flex: 1;
             padding-right: 8px;
         }
 
+        .item-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--dark-color);
+            line-height: 1.2;
+        }
+
         .item-price {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--primary-color);
             font-weight: 800;
+            margin-top: 2px;
         }
 
         .counter-control {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: var(--category-bg);
-            border-radius: 8px;
-            padding: 4px;
+            gap: 14px;
         }
 
         .btn-count {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
             border: none;
             background: var(--primary-color);
             color: white;
@@ -185,28 +171,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.1s;
-        }
-
-        .btn-count:hover {
-            background: var(--primary-light);
+            box-shadow: 0 3px 6px rgba(230, 92, 0, 0.2);
+            touch-action: manipulation;
         }
 
         .btn-count:active {
             transform: scale(0.95);
+            background: var(--primary-light);
         }
 
         .count-value {
             font-size: 18px;
-            font-weight: 800;
-            width: 40px;
+            font-weight: 700;
+            min-width: 24px;
             text-align: center;
         }
 
-        /* Sidebar / Checkout (Lado Direito) */
+        /* Sidebar / Checkout Base */
         .checkout-sidebar {
-            position: sticky;
-            top: 24px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -217,16 +199,16 @@
             background: #fdfaf5;
             border: 2px dashed var(--border-color);
             border-radius: 16px;
-            padding: 20px;
+            padding: 16px;
             display: none;
             max-height: 400px;
             overflow-y: auto;
         }
 
         .summary-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             color: var(--dark-color);
             text-transform: uppercase;
             text-align: center;
@@ -236,15 +218,15 @@
 
         .order-summary-list {
             list-style: none;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         .order-summary-list li {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             border-bottom: 1px solid #f0e6da;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
         .order-summary-list li:last-child {
@@ -257,10 +239,10 @@
             font-weight: 800;
             color: white;
             background-color: var(--primary-color);
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 6px;
-            margin-right: 8px;
-            font-size: 13px;
+            margin-right: 6px;
+            font-size: 12px;
         }
 
         .summary-item-name {
@@ -277,101 +259,100 @@
         .summary-box {
             background: var(--dark-color);
             color: white;
-            padding: 24px;
+            padding: 18px;
             border-radius: 18px;
-            box-shadow: 0 8px 24px rgba(74, 35, 6, 0.2);
+            box-shadow: 0 6px 16px rgba(74, 35, 6, 0.15);
         }
 
         .summary-row {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
         }
 
         .summary-label {
             font-size: 16px;
-            font-weight: 600;
-            letter-spacing: 1px;
             opacity: 0.9;
         }
 
         .summary-total {
-            font-size: 42px;
+            font-size: 28px;
             font-weight: 800;
             color: var(--secondary-color);
         }
 
         /* Seção de Troco */
         .change-section {
-            background: #ffffff;
-            border: 2px solid var(--border-color);
+            background: #f9f9f9;
+            border: 1px solid var(--border-color);
             border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            padding: 16px;
         }
 
         .change-title {
-            font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
             color: var(--dark-color);
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .input-group {
             position: relative;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .input-group span {
             position: absolute;
-            left: 16px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            font-weight: 700;
-            font-size: 18px;
+            font-weight: 600;
             color: #7c624d;
         }
 
         .input-money {
             width: 100%;
-            padding: 16px 16px 16px 50px;
-            font-size: 20px;
-            font-weight: 700;
+            padding: 12px 12px 12px 42px;
+            font-size: 16px;
+            font-weight: 600;
             border: 2px solid var(--border-color);
             border-radius: 12px;
             color: var(--dark-color);
-            background: #fdfaf5;
+            background: white;
             outline: none;
-            transition: all 0.2s;
+            transition: border-color 0.2s;
+            -moz-appearance: textfield;
+        }
+
+        .input-money::-webkit-outer-spin-button,
+        .input-money::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .input-money:focus {
             border-color: var(--primary-color);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(230, 92, 0, 0.1);
         }
 
         .change-result {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 16px;
-            border-top: 2px dashed var(--border-color);
+            padding-top: 12px;
+            border-top: 1px dashed var(--border-color);
         }
 
         .change-label {
-            font-weight: 700;
-            font-size: 18px;
+            font-weight: 600;
+            font-size: 15px;
         }
 
         .change-value {
-            font-size: 26px;
-            font-weight: 800;
+            font-size: 20px;
+            font-weight: 700;
             color: #4caf50;
         }
         
@@ -381,30 +362,139 @@
 
         .btn-clear {
             width: 100%;
-            padding: 18px;
+            padding: 14px;
             background: #f0e6da;
             border: none;
             border-radius: 14px;
             color: var(--dark-color);
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: background 0.2s;
             text-transform: uppercase;
         }
         
-        .btn-clear:hover {
+        .btn-clear:active {
             background: #e2d3c1;
         }
 
-        .btn-clear:active {
-            transform: scale(0.98);
+        /* =========================================
+           MEDIA QUERIES - RESPONSIVIDADE
+           ========================================= */
+
+        /* TABLET (Telas médias) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .app-container {
+                max-width: 720px;
+            }
+            .menu-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .category-column {
+                background: #fdfaf5;
+                border: 1px solid var(--border-color);
+                border-radius: 16px;
+                padding: 16px;
+            }
         }
 
-        /* Responsividade para telas menores que Full HD, mas ainda Desktop/Tablet */
-        @media (max-width: 1200px) {
-            .desktop-layout { grid-template-columns: 1fr 320px; }
-            .menu-grid { grid-template-columns: repeat(2, 1fr); }
+        /* DESKTOP (Telas grandes) */
+        @media (min-width: 1024px) {
+            body { padding: 24px; }
+            
+            .app-container {
+                max-width: 1400px;
+                padding: 24px 32px;
+            }
+
+            .flags-container {
+                margin: -24px -32px 24px -32px;
+                padding-top: 8px;
+            }
+
+            .flag {
+                border-left: 18px solid transparent;
+                border-right: 18px solid transparent;
+                border-top: 26px solid var(--primary-color);
+            }
+
+            header h1 { font-size: 32px; }
+            header p { font-size: 16px; }
+
+            /* Grid Principal: Esquerda Cardápio, Direita Sidebar */
+            .app-layout {
+                display: grid;
+                grid-template-columns: 1fr 380px;
+                gap: 32px;
+                align-items: start;
+            }
+
+            /* Cardápio em 4 Colunas */
+            .menu-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+
+            .category-column {
+                background: #fdfaf5;
+                border: 1px solid var(--border-color);
+                border-radius: 16px;
+                padding: 16px;
+            }
+
+            /* Item ajustado para caixa vertical no Desktop */
+            .item-card {
+                flex-direction: column;
+                align-items: stretch;
+                background: #ffffff;
+                padding: 10px 12px;
+                border-radius: 12px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            }
+
+            .item-info {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 8px;
+                padding-right: 0;
+            }
+
+            .item-name { font-size: 14px; }
+            .item-price { font-size: 14px; }
+
+            .counter-control {
+                justify-content: space-between;
+                background: var(--category-bg);
+                border-radius: 8px;
+                padding: 4px;
+            }
+
+            .btn-count {
+                width: 32px;
+                height: 32px;
+                border-radius: 6px;
+                box-shadow: none;
+            }
+
+            .count-value { width: 40px; }
+
+            /* Fixa a Sidebar na tela enquanto rola */
+            .checkout-sidebar {
+                position: sticky;
+                top: 24px;
+            }
+
+            /* Aumenta elementos do Checkout no Desktop */
+            .summary-box { padding: 24px; }
+            .summary-row { flex-direction: column; gap: 8px; }
+            .summary-total { font-size: 42px; }
+            .change-section { padding: 20px; border: 2px solid var(--border-color); background: #ffffff; }
+            .input-money { font-size: 20px; padding: 16px 16px 16px 50px; background: #fdfaf5;}
+            .change-value { font-size: 26px; }
+            .btn-clear { padding: 18px; font-size: 18px; }
         }
     </style>
 </head>
@@ -412,19 +502,18 @@
 
     <div class="app-container">
         <div class="flags-container">
-            <div class="flag"></div><div class="flag"></div><div class="flag"></div>
-            <div class="flag"></div><div class="flag"></div><div class="flag"></div>
-            <div class="flag"></div><div class="flag"></div><div class="flag"></div>
-            <div class="flag"></div><div class="flag"></div><div class="flag"></div>
-            <div class="flag"></div><div class="flag"></div><div class="flag"></div>
+            <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
+            <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
+            <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
+            <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
         </div>
 
         <header>
             <h1>C.E. Malba Tahan</h1>
-            <p>Sistema de Caixa Desktop - Festa Junina</p>
+            <p>Sistema de Caixa - Festa Junina</p>
         </header>
 
-        <div class="desktop-layout">
+        <div class="app-layout">
             <main class="menu-grid" id="items-list">
                 </main>
 
@@ -447,7 +536,7 @@
                     <div class="change-title">💸 Calculadora de Troco</div>
                     <div class="input-group">
                         <span>R$</span>
-                        <input type="number" step="0.01" placeholder="Valor pago" class="input-money" id="amount-paid" oninput="calculateChange()">
+                        <input type="number" step="0.01" inputmode="decimal" placeholder="Valor pago" class="input-money" id="amount-paid" oninput="calculateChange()">
                     </div>
                     <div class="change-result">
                         <span class="change-label" id="change-label">Troco:</span>
@@ -455,7 +544,7 @@
                     </div>
                 </div>
 
-                <button class="btn-clear" onclick="clearAll()">Zerar Pedido (F5)</button>
+                <button class="btn-clear" onclick="clearAll()">Zerar Pedido</button>
             </aside>
         </div>
     </div>
@@ -526,7 +615,7 @@
             container.innerHTML = '';
 
             menuData.forEach(cat => {
-                // Cria a coluna da categoria
+                // Coluna da Categoria
                 const col = document.createElement('div');
                 col.className = 'category-column';
 
@@ -649,7 +738,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Atalho de teclado: Apertar F5 zera o pedido (Evita recarregar a página e limpa os dados mais rápido)
+        // Atalho F5 exclusivo para desktop (Zera o pedido rápido)
         document.addEventListener('keydown', function(event) {
             if (event.key === 'F5') {
                 event.preventDefault();

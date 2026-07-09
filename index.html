@@ -336,7 +336,6 @@
     </div>
 
     <script>
-        // Dados atualizados estritamente de acordo com a imagem fornecida
         const menuData = [
             {
                 category: "Salgados",
@@ -347,7 +346,7 @@
                     { id: 'espetinho_carne', name: 'Espetinho de Carne', price: 8.00 },
                     { id: 'cachorro_quente', name: 'Cachorro-Quente', price: 12.00 },
                     { id: 'pastel', name: 'Pastel', price: 10.00 },
-                    { id: 'pipoca_salgada', name: 'Pipoca Salgada', price: 1.00 }
+                    { id: 'pipoca_salgada', name: 'Pipoca Salgada', price: 2.00 } // Preço atualizado aqui!
                 ]
             },
             {
@@ -385,11 +384,9 @@
             }
         ];
 
-        // Mapeamento plano para controle do estado do carrinho
         const cart = {};
         const productMap = {};
 
-        // Inicializa o estado do app com base no menuData
         menuData.forEach(cat => {
             cat.items.forEach(item => {
                 cart[item.id] = 0;
@@ -399,19 +396,16 @@
 
         let totalOrder = 0;
 
-        // Renderiza o cardápio dividindo por categorias visuais
         function renderMenu() {
             const container = document.getElementById('items-list');
             container.innerHTML = '';
 
             menuData.forEach(cat => {
-                // Adiciona o cabeçalho da categoria
                 const title = document.createElement('div');
                 title.className = 'category-title';
                 title.innerText = cat.category;
                 container.appendChild(title);
 
-                // Adiciona os itens pertencentes a ela
                 cat.items.forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'item-card';
@@ -431,7 +425,6 @@
             });
         }
 
-        // Atualiza a quantidade do item selecionado
         function updateQuantity(productId, change) {
             const currentQty = cart[productId];
             const newQty = currentQty + change;
@@ -443,7 +436,6 @@
             }
         }
 
-        // Soma os valores do carrinho
         function calculateTotal() {
             totalOrder = Object.keys(cart).reduce((sum, id) => {
                 return sum + (cart[id] * productMap[id].price);
@@ -453,7 +445,6 @@
             calculateChange();
         }
 
-        // Lógica automática de cálculo do troco ou débito
         function calculateChange() {
             const paidInput = document.getElementById('amount-paid');
             const changeDisplay = document.getElementById('change-display');
@@ -481,7 +472,6 @@
             }
         }
 
-        // Limpa todo o estado do formulário para o próximo cliente
         function clearAll() {
             Object.keys(cart).forEach(id => {
                 cart[id] = 0;

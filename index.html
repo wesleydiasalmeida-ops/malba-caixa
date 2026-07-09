@@ -379,54 +379,48 @@
         }
 
         /* =========================================
-           MEDIA QUERIES - RESPONSIVIDADE
+           MEDIA QUERIES - RESPONSIVIDADE (Desktop Compacto)
            ========================================= */
 
         /* TABLET (Telas médias) */
         @media (min-width: 768px) and (max-width: 1023px) {
-            .app-container {
-                max-width: 720px;
-            }
-            .menu-grid {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .category-column {
-                background: #fdfaf5;
-                border: 1px solid var(--border-color);
-                border-radius: 16px;
-                padding: 16px;
-            }
+            .app-container { max-width: 720px; }
+            .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+            .category-column { background: #fdfaf5; border: 1px solid var(--border-color); border-radius: 16px; padding: 16px; }
         }
 
-        /* DESKTOP (Telas grandes) */
+        /* DESKTOP (Telas grandes - Ajustado para encaixe sem scroll) */
         @media (min-width: 1024px) {
-            body { padding: 24px; }
+            body { 
+                padding: 12px; 
+                align-items: center; /* Centraliza na tela caso a altura seja maior */
+            }
             
             .app-container {
                 max-width: 1400px;
-                padding: 24px 32px;
+                padding: 16px 24px; /* Mais compacto na vertical */
             }
 
             .flags-container {
-                margin: -24px -32px 24px -32px;
-                padding-top: 8px;
+                margin: -16px -24px 12px -24px;
+                padding-top: 6px;
             }
 
             .flag {
-                border-left: 18px solid transparent;
-                border-right: 18px solid transparent;
-                border-top: 26px solid var(--primary-color);
+                border-left: 14px solid transparent;
+                border-right: 14px solid transparent;
+                border-top: 20px solid var(--primary-color);
             }
 
-            header h1 { font-size: 32px; }
-            header p { font-size: 16px; }
+            header { margin-bottom: 16px; }
+            header h1 { font-size: 24px; }
+            header p { font-size: 14px; }
 
             /* Grid Principal: Esquerda Cardápio, Direita Sidebar */
             .app-layout {
                 display: grid;
-                grid-template-columns: 1fr 380px;
-                gap: 32px;
+                grid-template-columns: 1fr 340px; /* Sidebar um pouco mais estreita */
+                gap: 20px;
                 align-items: start;
             }
 
@@ -434,67 +428,93 @@
             .menu-grid {
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
+                gap: 12px; /* Gaps reduzidos */
             }
 
             .category-column {
                 background: #fdfaf5;
                 border: 1px solid var(--border-color);
-                border-radius: 16px;
-                padding: 16px;
+                border-radius: 12px;
+                padding: 12px; /* Menos padding */
             }
 
-            /* Item ajustado para caixa vertical no Desktop */
+            .category-title {
+                margin-bottom: 8px;
+                padding: 4px 8px;
+                font-size: 13px;
+            }
+
+            .items-list { gap: 6px; } /* Itens mais colados */
+
+            /* Item card na horizontal no desktop para economizar MUITO espaço na vertical */
             .item-card {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: row; 
+                align-items: center;
+                justify-content: space-between;
+                padding: 6px 10px;
                 background: #ffffff;
-                padding: 10px 12px;
-                border-radius: 12px;
+                border-radius: 10px;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             }
 
             .item-info {
                 display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                margin-bottom: 8px;
-                padding-right: 0;
+                flex-direction: column;
+                justify-content: center;
+                margin-bottom: 0;
+                padding-right: 6px;
             }
 
-            .item-name { font-size: 14px; }
-            .item-price { font-size: 14px; }
+            .item-name { font-size: 13px; line-height: 1.1; margin-bottom: 2px;}
+            .item-price { font-size: 13px; }
 
             .counter-control {
-                justify-content: space-between;
                 background: var(--category-bg);
                 border-radius: 8px;
-                padding: 4px;
+                padding: 2px;
+                gap: 8px;
             }
 
             .btn-count {
-                width: 32px;
-                height: 32px;
+                width: 28px;
+                height: 28px;
                 border-radius: 6px;
                 box-shadow: none;
+                font-size: 16px;
             }
 
-            .count-value { width: 40px; }
+            .count-value { width: 24px; font-size: 15px; }
 
-            /* Fixa a Sidebar na tela enquanto rola */
+            /* Fixa a Sidebar na tela */
             .checkout-sidebar {
                 position: sticky;
-                top: 24px;
+                top: 16px;
+                gap: 12px;
             }
 
-            /* Aumenta elementos do Checkout no Desktop */
-            .summary-box { padding: 24px; }
-            .summary-row { flex-direction: column; gap: 8px; }
-            .summary-total { font-size: 42px; }
-            .change-section { padding: 20px; border: 2px solid var(--border-color); background: #ffffff; }
-            .input-money { font-size: 20px; padding: 16px 16px 16px 50px; background: #fdfaf5;}
-            .change-value { font-size: 26px; }
-            .btn-clear { padding: 18px; font-size: 18px; }
+            /* Resumo com max-height para evitar estourar a tela caso peça muitos itens */
+            .order-summary-container { 
+                padding: 12px; 
+                max-height: 25vh; 
+                overflow-y: auto;
+            }
+            .summary-title { margin-bottom: 8px; font-size: 14px; }
+            .order-summary-list li { margin-bottom: 6px; padding-bottom: 6px; }
+
+            /* Elementos do Checkout Compactos */
+            .summary-box { padding: 16px; border-radius: 14px; }
+            .summary-row { flex-direction: column; gap: 4px; }
+            .summary-total { font-size: 32px; }
+            
+            .change-section { padding: 16px; border: 2px solid var(--border-color); background: #ffffff; border-radius: 14px; }
+            .change-title { margin-bottom: 12px; font-size: 14px; }
+            .input-group { margin-bottom: 10px; }
+            .input-money { font-size: 18px; padding: 10px 10px 10px 40px; background: #fdfaf5;}
+            .change-result { padding-top: 10px; }
+            .change-label { font-size: 15px; }
+            .change-value { font-size: 22px; }
+            
+            .btn-clear { padding: 12px; font-size: 16px; }
         }
     </style>
 </head>
@@ -614,7 +634,6 @@
             container.innerHTML = '';
 
             menuData.forEach(cat => {
-                // Coluna da Categoria
                 const col = document.createElement('div');
                 col.className = 'category-column';
 
